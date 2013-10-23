@@ -408,11 +408,11 @@ public class AzureMethod {
         params.setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 10000);
         params.setParameter(CoreConnectionPNames.SO_TIMEOUT, 300000);
 
-        Properties p = ctx.getCustomProperties();
+        Properties p = System.getProperties();
 
         if( p != null ) {
-            String proxyHost = p.getProperty("proxyHost");
-            String proxyPort = p.getProperty("proxyPort");
+            String proxyHost = p.getProperty("http.proxyHost");
+            String proxyPort = p.getProperty("http.proxyPort");
 
             if( proxyHost != null ) {
                 int port = 0;
