@@ -420,7 +420,7 @@ public class AzureMethod {
                 if( proxyPort != null && proxyPort.length() > 0 ) {
                     port = Integer.parseInt(proxyPort);
                 }
-                params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost(proxyHost, port, ssl ? "https" : "http"));
+                params.setParameter(ConnRoutePNames.DEFAULT_PROXY, new HttpHost(proxyHost, port, "http"));
             }
         }
 
