@@ -3,7 +3,7 @@
 
     <groupId>org.dasein</groupId>
     <artifactId>dasein-cloud-azure</artifactId>
-    <version>2014.08.2-SNAPSHOT</version>
+    <version>2014.08.2p1</version>
     <packaging>jar</packaging>
 
     <name>dasein-cloud-azure</name>
@@ -313,15 +313,14 @@
     </build>
 
     <distributionManagement>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-            <uniqueVersion>false</uniqueVersion>
-        </repository>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
+      <repository>
+        <id>enstratus</id>
+        <url>https://artifactory.int.enstratius.com/artifactory/libs-release-local</url>
+      </repository>
+      <snapshotRepository>
+        <id>enstratus-snapshot</id>
+        <url>https://artifactory.int.enstratius.com/artifactory/libs-snapshot-local</url>
+      </snapshotRepository>
     </distributionManagement>
 
     <developers>
