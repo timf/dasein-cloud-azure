@@ -847,6 +847,11 @@ public class AzureOSImage extends AbstractImageSupport {
             }
         }
         image.setSoftware(descriptor.contains("SQL Server") ? "SQL Server" : "");
+        if (isPublicImageProviderOwnerId(image.getProviderOwnerId())) {
+            tags.put("public", "true");
+        } else {
+            tags.put("public", "false");
+        }
         image.setTags(tags);
         image.setType(MachineImageType.VOLUME);
 
