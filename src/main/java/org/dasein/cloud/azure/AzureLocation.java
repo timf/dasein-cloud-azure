@@ -18,12 +18,10 @@
 
 package org.dasein.cloud.azure;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ProviderContext;
-import org.dasein.cloud.azure.compute.image.AzureMachineImage;
 import org.dasein.cloud.dc.*;
 import org.dasein.cloud.util.Cache;
 import org.dasein.cloud.util.CacheLevel;
@@ -35,7 +33,6 @@ import org.w3c.dom.NodeList;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -113,9 +110,20 @@ public class AzureLocation implements DataCenterServices {
         }
         AzureMethod method = new AzureMethod(provider);
 
+        final String cacheName = "AzureLocation.isSubscribed." + toService;
+        Cache<Boolean> cache = org.dasein.cloud.util.Cache.getInstance(provider, cacheName, Boolean.class, CacheLevel.REGION_ACCOUNT);
+        final Iterable<Boolean> cachedIsSubscribed = cache.get(ctx);
+        if (cachedIsSubscribed != null && cachedIsSubscribed.iterator().hasNext()) {
+            final Boolean isSubscribed = cachedIsSubscribed.iterator().next();
+            if (isSubscribed != null) {
+                return isSubscribed;
+            }
+        }
+
         Document doc = method.getAsXML(ctx.getAccountNumber(), LOCATIONS);
 
         if( doc == null ) {
+            cache.put(ctx, Collections.singleton(false));
             return false;
         }
         NodeList entries = doc.getElementsByTagName("Location");
@@ -152,10 +160,12 @@ public class AzureLocation implements DataCenterServices {
                     }
                 }
                 if( regionId != null && regionId.equalsIgnoreCase(ctx.getRegionId()) ) {
+                    cache.put(ctx, Collections.singleton(subscribed));
                     return subscribed;
                 }
             }
         }
+        cache.put(ctx, Collections.singleton(false));
         return false;
     }
     
